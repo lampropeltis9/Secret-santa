@@ -4,7 +4,7 @@ import pandas as pd
 import segno
 
 # %%
-# Liaison entre les père-noëls secrets et les receveurs
+# Liaison père-noëls / receveurs, génération des QRcodes
 def secret_santa(participants : pd.DataFrame) -> dict:
     """
     Pour une liste de participants donnée, affecte aléatoirement
@@ -26,7 +26,7 @@ def secret_santa(participants : pd.DataFrame) -> dict:
 
 # Liste des participants
 participants = pd.read_csv('infile/lst_participants.csv',
-                           dtype={'NOM':'str', 'EMAIL':'str'})
+                           dtype={'NOM':'str'})
 
 # Correspondances
 assignments = secret_santa(participants)
