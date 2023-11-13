@@ -1,7 +1,10 @@
 # %%
+# Packages
 import pandas as pd
 import segno
 
+# %%
+# Liaison entre les père-noëls secrets et les receveurs
 def secret_santa(participants : pd.DataFrame) -> dict:
     """
     Pour une liste de participants donnée, affecte aléatoirement
@@ -15,27 +18,21 @@ def secret_santa(participants : pd.DataFrame) -> dict:
     ------
     Dictionnaire : {donneur : receveur}
     """
-    # Mélanger la liste des participants de manière aléatoire
     participants = participants.sample(frac=1).reset_index(drop=True)
 
-    # Créer une correspondance entre chaque personne et la personne à qui elle doit offrir un cadeau
-    assignments = {participants.loc[i, 'NOM']: \
-                   participants.loc[(i + 1) % len(participants), 'NOM'] \
+    return {participants.loc[i, 'NOM']: \
+                participants.loc[(i + 1) % len(participants), 'NOM'] \
                     for i in range(len(participants))}
 
-    return assignments
-
 # Liste des participants
-# participants = ["theophile", "marion", "alexis", "amandine", "ele"]
-participants = pd.read_csv('lst_participants.csv',
+participants = pd.read_csv('infile/lst_participants.csv',
                            dtype={'NOM':'str', 'EMAIL':'str'})
 
-# Obtenir les correspondances
+# Correspondances
 assignments = secret_santa(participants)
 
-# Afficher les correspondances
+# Générer les QR codes
 for giver, receiver in assignments.items():
-    print(f"{giver} offre un cadeau à {receiver}")
     qrcode = segno.make_qr(f"Tu offres un cadeau à {receiver}")
-    qrcode.save(f"qrcode_{giver}.png", scale = 10)
+    qrcode.save(f"qrcodes/qrcode_{giver}.png", scale = 10)
 # %%
